@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star Counter Online</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <span class="badge">Astronomia • Processamento de Imagens</span>
+      <h1>Star Counter Online</h1>
+      <p>
+        Envie uma imagem astronômica, ajuste a sensibilidade de brilho e selecione a faixa de diâmetro das estrelas.
+        O sistema estima fundo local, rejeita hot pixels e ruído e mede cada estrela detectada por perfil radial.
+      </p>
+    </header>
+
+    <main class="layout">
+      <section class="stack">
+        <article class="card">
+          <h2>Imagem de entrada</h2>
+          <p class="subtitle">Formatos recomendados: JPG, JPEG, PNG e TIFF. RAW pode depender do suporte do navegador.</p>
+
+          <label class="upload-zone" for="imageInput">
+            <div class="upload-icon">✦</div>
+            <strong>Escolher imagem</strong>
+            <span>Arraste e solte ou clique para abrir o arquivo</span>
+            <input id="imageInput" type="file" accept=".jpg,.jpeg,.png,.tif,.tiff,.raw,image/*" hidden />
+          </label>
+
+          <div class="file-line">
+            <span>Arquivo:</span>
+            <strong id="fileName">Nenhum arquivo selecionado</strong>
+          </div>
+
+          <div class="controls-grid">
+            <div class="control-block full-width">
+              <div class="control-header">
+                <label for="sensitivitySlider">Threshold / sensibilidade de brilho</label>
+                <span id="sensitivityValue">50%</span>
+              </div>
+              <input id="sensitivitySlider" type="range" min="0" max="100" value="50" step="1" />
+              <p class="hint">Quanto mais próximo de 100%, mais brilhante fica o preview e mais sensível fica a detecção.</p>
+            </div>
+
+            <div class="control-block full-width">
+              <div class="control-header">
+                <label>Faixa de diâmetro detectado</label>
+                <span id="rangeLabel">0,5 px — 100,0 px</span>
+              </div>
+              <div class="dual-range">
+                <input id="sizeMinSlider" type="range" min="0.1" max="100" value="0.5" step="0.1" />
+                <input id="sizeMaxSlider" type="range" min="0.1" max="100" value="100" step="0.1" />
+              </div>
+              <div class="number-pair">
+                <label>Mínimo <input id="sizeMinInput" type="number" min="0.1" max="100" value="0.5" step="0.1" /></label>
+                <label>Máximo <input id="sizeMaxInput" type="number" min="0.1" max="100" value="100" step="0.1" /></label>
+              </div>
+              <p class="hint">A faixa filtra o diâmetro estimado de cada estrela medida, não o tamanho de regiões arbitrárias.</p>
+            </div>
+
+            <div class="control-block">
+              <label for="exportFormat">Formato de exportação</label>
+              <select id="exportFormat">
+                <option value="jpg">JPG</option>
+                <option value="png">PNG</option>
+              </select>
+              <label class="checkbox-line" for="exportCaption">
+                <input id="exportCaption" type="checkbox" />
+                <span>Adicionar legendas na exportação</span>
+              </label>
+            </div>
+
+            <div class="control-block button-stack">
+              <button id="analyzeBtn" class="primary">Calcular Número de Estrelas</button>
+              <button id="exportBtn" class="secondary">Exportar imagem marcada</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Número de estrelas detectadas x Faixa de Diâmetro</h2>
+          <div class="chart-wrap">
+            <canvas id="variationCanvas" width="900" height="340"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section class="stack">
+        <article class="card">
+          <h2>Resultado da análise</h2>
+          <p class="subtitle">Preview com brilho ajustado pelo slider e marcação das estrelas detectadas.</p>
+          <div class="canvas-wrap">
+            <canvas id="previewCanvas"></canvas>
+          </div>
+        </article>
+
+        <article class="metrics-grid metrics-grid-compact">
+          <div class="metric-box">
+            <span class="metric-label" id="summedRangeLabel">Somatória 0,5–100,0 px</span>
+            <strong id="summedCount">0</strong>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">FWHM média</span>
+            <strong id="fwhmAvg">0 px</strong>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Resumo técnico</h2>
+          <div id="analysisSummary" class="summary-box">
+            Carregue uma imagem para iniciar a análise.
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Histograma RGB</h2>
+          <p class="subtitle">Linha e área preenchida por canal com indicação tonal do histograma.</p>
+          <div class="chart-wrap histogram-wrap">
+            <canvas id="histogramCanvas" width="900" height="380"></canvas>
+            <div class="tone-labels">
+              <span>Sombra</span>
+              <span>Meios-tons</span>
+              <span>Altas Luzes</span>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div id="progressModal" class="progress-modal" hidden>
+    <div class="progress-card">
+      <strong>Analisando imagem</strong>
+      <p id="progressText">0% carregado...</p>
+      <p id="progressStage" class="progress-stage">Etapa: aguardando início.</p>
+      <p id="progressEta" class="progress-eta">Tempo estimado: XX min XX s</p>
+      <div class="progress-bar"><span id="progressFill"></span></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
