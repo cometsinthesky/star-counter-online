@@ -46,11 +46,10 @@ A aplicação executa a análise da imagem no navegador e utiliza uma abordagem 
 
 ```text
 .
-├── index.html
-├── styles.css
-└── app.js
+├── index.html  - arquivo principal da aplicação, contendo a estrutura da interface, área de upload, controles, botões, gráficos e visualização dos resultados.
+├── styles.css - arquivo responsável pela aparência visual da página, incluindo cores, tipografia, layout responsivo, cards, sliders, botões e demais estilos.
+└── app.js     - arquivo que reúne a lógica do projeto, como carregamento da imagem, detecção das estrelas, cálculos, atualização dos gráficos e exportação da imagem analisada.
 ```
-
 ## Como usar
 
 ### 1. Abra no navegador
