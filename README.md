@@ -49,6 +49,7 @@ A aplicação executa a análise da imagem no navegador e utiliza uma abordagem 
 ├── index.html
 ├── styles.css
 └── app.js
+```
 
 ## Como usar
 
